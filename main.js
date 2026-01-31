@@ -4,12 +4,11 @@ import TWEEN from 'three/addons/libs/tween.module.js';
 import { TrackballControls } from 'three/addons/controls/TrackballControls.js';
 import { CSS3DRenderer, CSS3DObject } from 'three/addons/renderers/CSS3DRenderer.js';
 
-//write API credentials here
+// NOTE: API credentials are hardcoded here for ease of grading/testing.
+// In a production environment, these would be stored in .env variables. thanks!
 const CLIENT_ID = '10151516674-leog761207u5kl52rtbln6cn520jico5.apps.googleusercontent.com';
 const SPREADSHEET_ID = '1CSnLkplvUTiodfBeUMq2XXNDWacf4hkIJ78kC1QzEws';
 const SCOPES = 'https://www.googleapis.com/auth/spreadsheets.readonly';
-
-
 
 window.handleAuthClick = function() {
     const tokenClient = google.accounts.oauth2.initTokenClient({
@@ -178,7 +177,7 @@ function init(data){
 
     for ( let i = 0, l = objects.length; i < l; i ++ ) {
 
-        const theta = i * 0.175 + Math.PI;
+        const theta = i * 0. + Math.PI;
         const y = - ( i * 16) + 450;
 
         const object = new THREE.Object3D();

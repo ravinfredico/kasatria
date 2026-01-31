@@ -179,7 +179,7 @@ function init(data){
     for ( let i = 0, l = objects.length; i < l; i ++ ) {
 
         const theta = i * 0.175 + Math.PI;
-        const y = - ( i * 8 ) + 450;
+        const y = - ( i * 16) + 450;
 
         const object = new THREE.Object3D();
 
@@ -193,6 +193,21 @@ function init(data){
 
         targets.helix.push( object );
 
+        //i think to make a double helix we can just double it down
+        const theta2= theta + Math.PI;
+        const y2= y;
+
+        const object2= new THREE.Object3D();
+
+        object2.position.setFromCylindricalCoords( 900, theta2, y2 );
+
+        vector.x = object2.position.x * 2;
+        vector.y = object2.position.y;
+        vector.z = object2.position.z * 2;
+
+        object2.lookAt( vector );
+
+        targets.helix.push( object2 );
     }
 
     // grid

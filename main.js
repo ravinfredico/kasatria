@@ -5,7 +5,7 @@ import { TrackballControls } from 'three/addons/controls/TrackballControls.js';
 import { CSS3DRenderer, CSS3DObject } from 'three/addons/renderers/CSS3DRenderer.js';
 
 // NOTE: API credentials are hardcoded here for ease of grading/testing.
-// In a production environment, these would be stored in .env variables. thanks!
+// In a production environment, these would be stored in .env variables. thanks
 const CLIENT_ID = '10151516674-leog761207u5kl52rtbln6cn520jico5.apps.googleusercontent.com';
 const SPREADSHEET_ID = '1CSnLkplvUTiodfBeUMq2XXNDWacf4hkIJ78kC1QzEws';
 const SCOPES = 'https://www.googleapis.com/auth/spreadsheets.readonly';
@@ -50,7 +50,7 @@ let camera, scene, renderer;
 let controls;
 
 const objects = [];
-const targets = { table: [], sphere: [], helix: [], grid: [] };
+const targets = { table: [], sphere: [], helix: [], grid: [] , Pyramid: []};
 
 function init(data){
     console.log('init called with data:', data);
@@ -177,7 +177,7 @@ function init(data){
 
     for ( let i = 0, l = objects.length; i < l; i ++ ) {
 
-        const theta = i * 0. + Math.PI;
+        const theta = i * 0.175 + Math.PI;
         const y = - ( i * 16) + 450;
 
         const object = new THREE.Object3D();
@@ -225,6 +225,57 @@ function init(data){
 
     }
 
+    //pyramid , i think very similar with sphere
+
+     // Tetrahedral Pyraminx (4 faces, all triangles, no special base)
+            targets.pyraminx = [];
+            // Tetrahedron vertices (side length = 1, can scale later)
+            const v0 = new THREE.Vector3(0, 0, 0);
+            const v1 = new THREE.Vector3(1, 0, 0);
+            const v2 = new THREE.Vector3(0.5, Math.sqrt(3)/2, 0);
+            const v3 = new THREE.Vector3(0.5, Math.sqrt(3)/6, Math.sqrt(2/3));
+            // List of faces (each as 3 vertices)
+            const faces = [
+                [v0, v1, v2],
+                [v0, v1, v3],
+                [v1, v2, v3],
+                [v2, v0, v3]
+            ];
+            // How many points per face (adjust as needed)
+            const totalObjects = objects.length;
+            const facesCount = 4;
+            const pointsPerFace = Math.ceil(totalObjects / facesCount);
+            let objIndex = 0;
+            // For each face
+            for (let f = 0; f < facesCount; f++) {
+                const [a, b, c] = faces[f];
+                // Distribute points in a triangular grid on the face
+                let n = Math.ceil((-1 + Math.sqrt(1 + 8 * pointsPerFace)) / 2); // rows needed for ~pointsPerFace
+                let count = 0;
+                for (let i = 0; i < n && objIndex < totalObjects; i++) {
+                    for (let j = 0; j <= i && objIndex < totalObjects; j++) {
+                        // Barycentric coordinates
+                        let u = 1 - i / (n - 1);
+                        let v = (i - j) / (n - 1);
+                        let w = j / (n - 1);
+                        // Position = a*u + b*v + c*w
+                        let pos = new THREE.Vector3()
+                            .addScaledVector(a, u)
+                            .addScaledVector(b, v)
+                            .addScaledVector(c, w)
+                            .multiplyScalar(2400); // scale up for visibility
+                        let object = new THREE.Object3D();
+                        object.position.copy(pos);
+                        // Optional: orient to face outwards from the center
+                        object.lookAt(new THREE.Vector3(0.5, Math.sqrt(3)/6, Math.sqrt(2/3)/4).multiplyScalar(400));
+                        targets.pyraminx.push(object);
+                        objIndex++;
+                        count++;
+                    }
+                }
+            }
+        //so we are aiming to do a pyramid with 3 sides and 1 base, sides and base all are the same shape and also there are 200 elements, so each side we can say its 50 elements each
+        //so if we use approxiamtion = 50 elements, 
     //
 
     renderer = new CSS3DRenderer();
@@ -265,6 +316,13 @@ function init(data){
         transform( targets.grid, 2000 );
 
     } );
+
+    const buttonPyramid = document.getElementById( 'pyramid' );
+    buttonPyramid.addEventListener( 'click', function () {
+
+        transform( targets.pyraminx, 2000 );
+
+    } )
 
     transform( targets.table, 2000 );
 

@@ -267,7 +267,13 @@ function init(data){
                         let object = new THREE.Object3D();
                         object.position.copy(pos);
                         // Optional: orient to face outwards from the center
-                        object.lookAt(new THREE.Vector3(0.5, Math.sqrt(3)/6, Math.sqrt(2/3)/4).multiplyScalar(400));
+                        let normal = new THREE.Vector3()
+                        .crossVectors(
+                            new THREE.Vector3().subVectors(b, a),
+                            new THREE.Vector3().subVectors(c, a)
+                        )
+                        .normalize();
+                        object.lookAt(new THREE.Vector3().addVectors(pos, normal));
                         targets.pyraminx.push(object);
                         objIndex++;
                         count++;

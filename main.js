@@ -250,7 +250,7 @@ function init(data){
             for (let f = 0; f < facesCount; f++) {
                 const [a, b, c] = faces[f];
                 // Distribute points in a triangular grid on the face
-                let n = Math.max(2, Math.ceil((-1 + Math.sqrt(1 + 8 * pointsPerFace)) / 2); // rows needed for ~pointsPerFace
+                let n = Math.max(2, Math.ceil((-1 + Math.sqrt(1 + 8 * pointsPerFace)) / 2)); // rows needed for ~pointsPerFace
                 let count = 0;
                 for (let i = 0; i < n && objIndex < totalObjects; i++) {
                     for (let j = 0; j <= i && objIndex < totalObjects; j++) {
